@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 /* eslint-disable camelcase */
 const { Router } = require('express');
 
@@ -70,7 +71,7 @@ function validData (reqData) {
 router.post('/goti', (req, res) => {
 	const reqData = {
 		col: req.body.col, // colour
-		coords: req.body.hasOwnProperty('coords') ? req.body.coords: null, // current coords,		additional if to solve `Prototype Pollution vulnerability` pointed by deepcode
+		coords: req.body.hasOwnProperty('coords') ? req.body.coords : null, // current coords,		additional if to solve `Prototype Pollution vulnerability` pointed by deepcode
 		dist: Number(req.body.dist)	// dist=0 will give Input Not Valid
 	};
 
@@ -80,7 +81,7 @@ router.post('/goti', (req, res) => {
 
 	const colour = reqData.col;
 	const dist = reqData.dist;
-	if( ! reqData.coords.hasOwnProperty('length') )	return res.sendStatus(400);	//fixing deepcode warning
+	if( !reqData.coords.hasOwnProperty('length') )	return res.sendStatus(400);	// fixing deepcode warning
 	if (reqData.coords.length === 2 && all(reqData.coords, iter => typeof (iter) === 'number')) {	// ie. is a single pair
 		reqData.coords = [reqData.coords];	// convert to an array
 	}
@@ -90,7 +91,7 @@ router.post('/goti', (req, res) => {
 
 	if (dist === 0) { return res.send({ bool: false }); }
 	let possibility, finalCoord;
-	if( ! reqData.coords.hasOwnProperty('length') )	return res.sendStatus(400);	//fix to deepcode warning
+	if( !reqData.coords.hasOwnProperty('length') )	return res.sendStatus(400);	// fix to deepcode warning
 	reqData.coords.forEach(coord => {
 		[possibility, finalCoord] = moveGoti(colour, coord, dist);
 		bools.push(possibility);
@@ -108,9 +109,9 @@ function moveGoti (colour, coord, dist) {
 	let turnDirection = null;
 	const updated_coords = coord;
 	let currDirection = getDirection(updated_coords);
-	dist = Number(dist);	//if it's string, convert to number
+	dist = Number(dist);	// if it's string, convert to number
 
-	if (!currDirection || !dist || typeof(colour) !== 'string' ) return [false];
+	if (!currDirection || !dist || typeof (colour) !== 'string' ) return [false];
 
 	if (dist === 0) return [false];
 	while (dist-- > 0) {
